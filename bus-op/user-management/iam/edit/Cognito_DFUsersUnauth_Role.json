@@ -1,0 +1,29 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "mobileanalytics:PutEvents",
+                "cognito-sync:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": [
+                "arn:aws:lambda:us-east-1:699582799620:function:DFUserAuthCreateUser",
+                "arn:aws:lambda:us-east-1:699582799620:function:DFUserAuthVerifyUser",
+                "arn:aws:lambda:us-east-1:699582799620:function:DFUserAuthLostUser",
+                "arn:aws:lambda:us-east-1:699582799620:function:DFUserAuthLostPassword",
+                "arn:aws:lambda:us-east-1:699582799620:function:DFUserAuthResetPassword",
+                "arn:aws:lambda:us-east-1:699582799620:function:DFUserAuthLogin"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+  "MAX_AGE": "10",
+  "BUCKET": "login.dev.dorkforces.com",
+  "REGION": "us-east-1",
+  "AWS_ACCOUNT_ID": "699582799620",
+  "EXTERNAL_NAME": "Dorkforces User Authentication",
+  "DEVELOPER_PROVIDER_NAME": "login.dev.dorkforces.com",
+  "IDENTITY_POOL_NAME": "DFUsers",
+  "DDB_TABLE": "DFUsers",
+  "DDB_PROFILE_TABLE": "DFUserProfiles",
+  "IDENTITY_POOL_ID": "us-east-1:2bed1266-885d-499f-a0f6-f2c0c5ee15e5",
+  "RESET_PAGE": "http://login.dev.dorkforces.com.s3-website-us-west-2.amazonaws.com/reset.html",
+  "VERIFICATION_PAGE": "http://login.dev.dorkforces.com.s3-website-us-west-2.amazonaws.com/verify.html",
+  "EMAIL_SOURCE": "xuechen.yang@gmail.com"
+}
