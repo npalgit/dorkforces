@@ -1,0 +1,73 @@
+// View Post
+// refer to www/templates/view-post.html for source code
+
+.bar.post-bar {
+	background-color:transparentize(black, 0.7); 
+	border-bottom:1px solid transparentize(white, 0.8); 
+}
+
+.bar.post-bar .button {color:white;}
+
+.bar.post-bar .title {color:white;}
+
+.post {
+	overflow:hidden; 
+	position:relative;
+}
+
+/*
+your image should be big enough to cover the area 
+(about 500px in height or at least the height of .post)
+The image will be centralized by default
+*/
+
+.post .post-wallpaper {}
+.post, .post-overlay {height:400px;}
+.post-overlay {
+	z-index:2;
+	position: absolute;
+	width:100%;
+	background-color:transparentize(black, 0.4);	
+}
+.post-details {
+	position:absolute; 
+	bottom:0; z-index:3;
+	width:100%;
+	padding:10px;
+}
+.post-details .post-title {color: white;}
+.post-by {
+	position:relative; 
+	border-top:1px solid transparentize(white, 0.5); 
+	border-bottom:1px solid transparentize(white, 0.5); 
+	padding:10px 0; 
+	color:transparentize(white, 0.25);
+}
+.post-by.with-thumbnail {padding-left:40px;}
+.post-date {
+	float:right; 
+	font-size:12px; 
+	display:inline-block; 
+	margin: 5px 0; 
+	white-space: nowrap;
+}
+.poster-thumb {
+	height:30px; 
+	@include border-radius(500px); 
+	position:absolute; left:0; 
+	top:12%;}
+
+.post-section {
+	background-color:#ecf0f1; 
+	padding:10px;
+}
+.post-content {
+	background-color: white;
+	padding: 20px;
+	margin: 10px 5px;
+	line-height: 1.8em;
+}
+.post-content p {
+	margin-bottom:20px;
+}
+

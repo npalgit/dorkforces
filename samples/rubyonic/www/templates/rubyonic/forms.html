@@ -1,0 +1,117 @@
+<!-- Form Screen - Refer to form.scss -->
+<ion-view view-title="Forms" hide-nav-bar="true" class="rubyonic-pane form-screen">
+  <!-- Custom Header:
+  We did this so we could have a custom bar without 
+  altering ionic's state/history management.
+  Use with 'hide-nav-bar="true"' attribute at line 1: -->
+  <div class="bar bar-ruby-header bar-transparent">
+    <button class="button ruby-button-clear icon ion-navicon brand-base-text-color" menu-toggle="left">
+    	<span class="new-notification-bubble"></span>
+    </button>
+    <h1 class="title brand-base-text-color">Forms</h1>
+    <button class="button ruby-button-clear icon ion-android-notifications brand-base-text-color" menu-toggle="right"></button>
+  </div>
+  <!-- End Custom navbar -->
+  <ion-content class="has-header">
+  	<div class="padding form-rb-plain">
+
+		<div class="list">
+		   <label class="item item-input item-select">
+		      <div class="input-label">
+		         Lightsaber
+		      </div>
+		      <select>
+		         <option>Blue</option>
+		         <option selected>Green</option>
+		         <option>Red</option>
+		      </select>
+		   </label>
+		</div>
+
+		<div class="list list-inset">
+		   <label class="item item-input ruby-search-box">
+		   <i class="icon ion-search placeholder-icon"></i>
+		   <input type="text" placeholder="Hello? Is it me you're looking for?">
+		   </label>
+		</div>
+
+		<div class="list">
+		   <label class="item item-input">
+		   <input type="text" placeholder="First Name">
+		   </label>
+		   <label class="item item-input">
+		   <input type="text" placeholder="Last Name">
+		   </label>
+		   <label class="item item-input">
+		   <textarea placeholder="Comments"></textarea>
+		   </label>
+		</div>
+
+		<div class="list">
+		   <label class="item item-input">
+		   <span class="input-label">Username</span>
+		   <input type="text" placeholder="Username">
+		   </label>
+		   <label class="item item-input">
+		   <span class="input-label">Password</span>
+		   <input type="password" placeholder="Username">
+		   </label>
+		</div>
+
+		<div class="list list-inset">
+		   <label class="item item-input">
+		   <input type="text" placeholder="First Name">
+		   </label>
+		   <label class="item item-input">
+		   <input type="text" placeholder="Last Name">
+		   </label>
+		</div>
+
+		<ul class="list">
+		   <li class="item item-toggle">
+		      HTML5
+		      <label class="toggle toggle-assertive">
+		         <input type="checkbox">
+		         <div class="track">
+		            <div class="handle"></div>
+		         </div>
+		      </label>
+		   </li>
+		</ul>
+
+		<ul class="list">
+		   <li class="item item-checkbox">
+		      <label class="checkbox">
+		      <input type="checkbox">
+		      </label>
+		      Flux Capacitor
+		   </li>
+		</ul>
+
+		<div class="list">
+		   <label class="item item-radio">
+		      <input type="radio" name="group">
+		      <div class="item-content">
+		         Go
+		      </div>
+		      <i class="radio-icon ion-checkmark"></i>
+		   </label>
+		</div>
+
+		<div class="item range">
+		   <i class="icon ion-volume-low"></i>
+		   <input type="range" name="volume">
+		   <i class="icon ion-volume-high"></i>
+		</div>
+
+		<div class="list">
+		   <div class="item range range-positive">
+		      <i class="icon ion-ios-sunny-outline"></i>
+		      <input type="range" name="volume" min="0" max="100" value="33">
+		      <i class="icon ion-ios-sunny"></i>
+		   </div>
+		</div>
+
+  	</div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,115 @@
+<!-- Chat Conversation Screen - Refer to chat-ui.scss -->
+<ion-view view-title="Conversation" hide-nav-bar="true" class="rubyonic-pane chat-ui-screen">
+  <!-- 
+  setting 'hide-nav-bar="true"' above enables us to create our own header bar
+  by hiding the default one without messing with ionic's state/history management
+  -->
+
+<ion-header-bar align-title="left" class="bar-chat" ng-controller="NavigationCtrl">
+  <div class="buttons">
+    <button class="button button-clear brand-base-text-color" ng-click="go('app.chat-list')">
+      <i class="icon ion-ios-arrow-back"></i>
+    </button>
+  </div>
+  <h1 class="title">
+    <div class="chat-bar-contact-name">
+        <img src="img/demo/profile-image.jpg" class="chat-contact-thumb">
+        <h4 class="contact-title">Salinder Mules</h4>
+        <h6 class="contact-title"><i class="ion-compass"></i> Avengers Tower, New York</h6>
+      </div>
+  </h1>
+  <div class="buttons">
+    <button class="button button-clear brand-base-text-color">
+      <i class="icon ion-android-attach"></i>
+    </button>
+  </div>
+</ion-header-bar>
+
+  <ion-content class="has-header">
+  <!-- Custom Chat Contact Bar:-->
+  <!-- End Custom Chat Contact Bar -->
+
+  <div class="chat-window">
+
+    <div class="chat-message is-inbound">
+    <div class="chat-label">
+      Salinder says
+      <div class="text-shift-right">2 mins ago</div>
+    </div>
+    <img src="img/demo/guitar.jpg" alt="">
+    incoming message....
+    <div class="chat-label">
+      <div class="text-shift-right"><i class="ion-checkmark-circled"></i> Read</div>
+    </div>
+    </div>
+
+    <div class="chat-message is-outbound">
+      <div class="chat-label">you</div>
+        <img src="img/demo/berry.jpg" alt="">
+        outgoing message....
+        <div>
+          <div class="chat-label">
+            <div class="text-shift-right"><i class="ion-checkmark-circled"></i> Sent</div>
+          </div>
+        </div>
+    </div>
+
+    <div class="chat-message is-inbound">
+      <div class="chat-label">
+        Salinder says
+        <div class="text-shift-right">2 mins ago</div>
+      </div>
+      incoming message....
+      <div class="chat-label">
+        <div class="text-shift-right"><i class="ion-checkmark-circled"></i> Read</div>
+      </div>
+    </div>
+
+    <div class="chat-message is-outbound">
+      <div class="chat-label">you</div>
+        outgoing message....
+        <div>
+          <div class="chat-label">
+            <div class="text-shift-right"><i class="ion-checkmark-circled"></i> Sent</div>
+          </div>
+        </div>
+    </div>
+
+    <div class="chat-message is-outbound">
+      <div class="chat-label">
+        Salinder says
+        <div class="text-shift-right">2 mins ago</div>
+      </div>
+      incoming message....
+      <div class="chat-label">
+        <div class="text-shift-right"><i class="ion-checkmark-circled"></i> Read</div>
+      </div>
+    </div>
+
+
+    <div class="chat-message is-inbound">
+      <div class="chat-label">
+        Salinder says
+        <div class="text-shift-right">2 mins ago</div>
+      </div>
+      incoming message....
+      <div class="chat-label">
+        <div class="text-shift-right"><i class="ion-checkmark-circled"></i> Read</div>
+      </div>
+    </div>
+
+  </div>
+
+  </ion-content>
+
+  <ion-footer-bar class="chat-footer-bar">
+    <div class="row">
+      <button class="col col-20 button"><i class="icon ion-mic-a"></i></button>
+      <div class="col col-60">
+        <input type="text" class="chat-text-input" placeholder="type your message">
+      </div>
+      <button class="col col-20 button"><i class="icon ion-paper-airplane"></i></button>
+    </div>
+  </ion-footer-bar>
+
+</ion-view>

@@ -1,0 +1,58 @@
+// News/Home Feed
+// refer to www/templates/feed.html for html code
+
+// .feed-screen, .feed-screen.pane {background: $outer-space;}
+
+.bar.bar-transparent {background:none;}
+// .bar.bar-transparent .title {}
+.bar.bar-ruby-header {border-bottom:3px solid transparentize($brand-analogous-color, 0.2);}
+
+.ruby {}
+.ruby .list {margin-top:2px;}
+.ruby .list-inset {background-color:transparent; margin-top:5px; margin-bottom:15px;}
+.ruby .item.ruby-search-box {@include border-radius(8px);}
+
+
+.feed-item {margin:10px 0 16px 0;}
+.feed-item .feed-media {height:auto; overflow:hidden; position:relative;}
+.feed-item .feed-gradient-overlay {position:absolute; @include card-top-down-shadow(); height:200px; bottom:0; width:100%; z-index:1;}
+.feed-item .feed-image {width:100%;}
+.feed-item .feed-title {color:$white; position:absolute; bottom:5px; z-index:2; left:10px; right: 10px;}
+.feed-item .feed-item-details, .feed-item .feed-item-details--poster-type {background-color:$brand-contrast-color;; padding:12px;}
+.feed-item .feed-item-details--poster-type {position:relative; min-height:65px;}
+.feed-item .feed-stat, .feed-item .feed-stat {padding:6px 16px; border-width:1px; border-style:solid; @include border-radius(30px); display:inline-block; margin:0 3px; white-space: nowrap;}
+.feed-item .feed-poster-thumb {position: absolute; width: 45px; @include border-radius(500px); border:4px solid $white; top:10px;}
+.feed-posted-by {margin-left: 56px; margin-top: 13px;}
+.feed-time-post {position:absolute; right:0; top:16px; right:10px;}
+
+//feed quote
+.feed-item.is-quote {
+	position: relative;
+	padding: 43px 10px 15px 10px;
+}
+
+.feed-item.is-quote:before {
+	content: "\f347"; 
+	font-family: ionicons;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: inherit;
+	position: absolute;
+	font-size: 30px;
+	top: 15px;
+	left: 13px;
+	// margin: -300px 0 0 -200px;
+	z-index: 1;
+}
+
+// .news-feed
+
+.new-notification-bubble {display: inline-block;
+  position: absolute;
+  top: 5px;
+  right: -2px;
+  width: 10px;
+  border-radius: 500px;
+  height: 10px;
+  z-index: 5;
+  background: $alizarin;}

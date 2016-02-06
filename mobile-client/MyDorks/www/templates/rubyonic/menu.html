@@ -1,0 +1,199 @@
+<!-- Menu Screen - Refer to sidebar.scss -->
+<ion-side-menus enable-menu-with-back-views="true">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <!-- Left Menu Bar -->
+
+  <ion-side-menu side="left">
+    <ion-content class="menu-screen">
+
+      <!-- Profile Section -->
+      <div class="profile-box">
+        <img src="img/demo/profile-image.jpg" alt="" class="profile-box-thumb">
+        <div class="profile-box-details">
+          <h4 class="profile-name brand-base-text-color">Samuel L Jackson</h4>
+          <h6 class="profile-location brand-base-text-color"><i class="ion-compass"></i> A Tower, New York</h6>
+        </div>
+        <i class="profile-settings-icons"></i>
+      </div>
+      <!-- End Profile Section -->
+
+      <!-- Search Box -->
+      <div class="list menu-screen-searchbox">
+        <label class="item item-input">
+          <input type="text" placeholder="Search" class="text-color-contrast">
+          <i class="icon ion-search placeholder-icon"></i>
+        </label>
+      </div>
+      <!-- End Search Box -->
+
+      <!-- Group Header -->
+      <h6 class="group-header">Menu Link Demonstration</h6>
+      <!-- End Group Header -->
+
+      <!-- Ionic List -->
+      <ion-list>
+        <ion-item nav-clear menu-close href="#">
+          Login
+        </ion-item>
+        <ion-item nav-clear menu-close href="#" class="item item-icon-right">
+          Sync
+          <span class="item-note brand-base-text-color">
+            Last sync on 24th Jan 2015
+          </span>
+          <i class="icon ion-android-sync"></i>
+        </ion-item>
+        <!-- <ion-item nav-clear menu-close href="#" class="item item-icon-left">
+          <i class="icon ion-email"></i>
+          Messages
+          <span class="badge badge-assertive">25</span>
+        </ion-item> -->
+        <!-- <ion-item nav-clear menu-close href="#" class="item item-icon-left">
+          <i class="icon ion-calendar"></i>
+          Calendar
+        </ion-item> -->
+      </ion-list>
+      <!-- End Ionic List -->
+
+      <!-- Group Header -->
+      <h6 class="group-header">Rubyonic Screens</h6>
+      <!-- End Group Header -->
+
+      <!-- Ionic List -->
+      <ion-list ng-controller="NavigationCtrl">
+        <ion-item nav-clear menu-close ng-click="go('app.login')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-log-in"></i>
+          Login Screen
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.feed')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-ios-paper"></i>
+          Home/News Feed
+          <span class="badge badge-positive">5</span>
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.profile')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-person"></i>
+          Profile
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.view-post')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-document"></i>
+          View Post/Article
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.tinder-one')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-flame"></i>
+          Tinder Style 1 (New)
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.tinder-two')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-flame"></i>
+          Tinder Style 2 (New)
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.tinder-three')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-flame"></i>
+          Tinder Style 3 (New)
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.tinder-four')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-flame"></i>
+          Tinder Style 4 (New)
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.chat-list')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-chatbubbles"></i>
+          Chat UI
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="go('app.forms')" class="item item-icon-left brand-base-text-color">
+          <i class="icon ion-ios-list"></i>
+          Form UI
+        </ion-item>
+      </ion-list>
+      <!-- End Ionic List -->
+
+    </ion-content>
+
+    <!-- Footer Bar and Buttons -->
+
+    <ion-footer-bar class="auto-height bar-assertive menu-footer-bar">
+      <div class="row">
+        <button class="col button button-dark"><i class="ion-gear-b"></i> Settings</button>
+        <button class="col button button-clear"><i class="ion-log-out"></i> Logout</button>
+      </div>
+    </ion-footer-bar>
+
+    <!-- End Footer Bar and Buttons -->
+
+  </ion-side-menu>
+
+  <!-- End Left Menu Bar -->
+
+
+  <!-- Right Menu Bar -->
+  <ion-side-menu side="right">
+    <ion-content class="menu-screen">
+
+      <!-- Group Header -->
+      <h6 class="group-header">Data Representation</h6>
+      <!-- End Group Header -->
+
+      <!-- Data Representation Blocks -->
+      <div class="padding data-block data-icon-right">
+        <i class="ion-cloud icon-right"></i>
+        <h6 class="data-block-title uppercase">Storage till 24th January 2015</h6>
+        <h3 class="data-block-title bold">37% of 15gb</h3>
+      </div>
+      <!-- End Data Representation Blocks -->
+
+      <!-- Group Header -->
+      <h6 class="group-header">Notifications</h6>
+      <!-- End Group Header -->
+
+      <div class="list notifications">
+
+          <a class="item item-avatar" href="#">
+            <img src="img/demo/profile-image.jpg" class="notification-thumb">
+            <h3 class="notification-title"><i class="ion-email"></i> Tracy Sent you a message</h3>
+            <p class="notification-summary">“nom nom nom......nom!”</p>
+          </a>
+
+          <a class="item item-avatar" href="#">
+            <img src="img/demo/profile-image-2.jpg" class="notification-thumb">
+            <h3 class="notification-title"><i class="ion-email"></i> Tracy Sent you a message</h3>
+            <p class="notification-summary">Feedback.mp4 | 4:44 mins</p>
+          </a>
+
+          <a class="item item-avatar" href="#">
+            <img src="img/demo/profile-image-3.jpg" class="notification-thumb">
+            <h3 class="notification-title"><i class="ion-email"></i> Tracy Sent you a message</h3>
+            <p class="notification-summary">“I will find you....”</p>
+          </a>
+
+          <a class="item item-avatar" href="#">
+            <img src="img/demo/profile-image-4.jpg" class="notification-thumb">
+            <h3 class="notification-title"><i class="ion-email"></i> Tracy Sent you a message</h3>
+            <p class="notification-summary">the-truth.mp3 | 2:33 mins</p>
+          </a>
+
+          <a class="item item-avatar" href="#">
+            <img src="img/demo/profile-image-5.jpg" class="notification-thumb">
+            <h3 class="notification-title"><i class="ion-email"></i> Tracy Sent you a message</h3>
+            <p class="notification-summary">Back off, man. I'm a scientist.</p>
+          </a>
+
+      </div>
+
+
+
+    </ion-content>
+
+  </ion-side-menu>
+  <!-- End Right Menu Bar -->
+
+
+</ion-side-menus>

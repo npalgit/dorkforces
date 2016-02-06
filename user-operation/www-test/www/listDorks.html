@@ -1,0 +1,134 @@
+<html>
+<head>
+    <title>List All or list Dorks Page</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.28.min.js"></script>
+    <script>
+        AWS.config.region = '<REGION>';
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: '<IDENTITY_POOL_ID>'
+        });
+        var lambda = new AWS.Lambda();
+    </script>
+    <h1>Sample List All or listed Dorks Page</h1>
+    <div id="info">
+        List Dorks
+    </div>
+    <table>
+        <tr>
+        <td>User</td>
+        <td><input type="text" id="user" size="20">
+        </tr>
+        <tr>
+        <td>Password</td>
+        <td><input type="text" id="password" size="20">
+        </tr>
+        <tr>
+        <td><input type="checkbox" id="employed"> Employed Dorks Only<br>
+        </tr>
+        <tr>
+        <td colspan="2">
+            <button id="list-button">List Dorks</button>
+        </td>
+        </tr>
+            <tr>
+        <td colspan="2" class="center">
+            <a href="index.html">Back</a>
+        </td>
+        </tr>
+    </table>
+    <script>
+        var info = document.getElementById('info');
+        var user = document.getElementById('user');
+        var password = document.getElementById('password');
+        var employed = document.getElementById('employed');
+        var listButton = document.getElementById('list-button');
+        
+        listButton.addEventListener('click', function() {
+            AWS.config.credentials.clearCachedId();
+            
+            info.innerHTML = 'Ready to list dorks...';
+            if (user.value == null || user.value == '') {
+                info.innerHTML = 'Please specify your email address.';
+            } else if (password.value == null || password.value == '') {
+                info.innerHTML = 'Please specify a password.';
+            } else {
+                var input = {
+                    email: user.value,
+                    password: password.value
+                };
+                
+                lambda.invoke({
+                    FunctionName: 'DFUserAuthLogin',
+                    Payload: JSON.stringify(input)
+                }, function(err, data) {
+                    if (err) {
+                        console.log(err, err.stack);
+                        info.innerHTML = 'Error: ' + err;
+                    } else {
+                        var output = JSON.parse(data.Payload);
+                        
+                        console.log('identityId: ' + output.identityId);
+                        console.log('token: ' + output.token);
+                        
+                        if (!output.login) {
+                            info.innerHTML = '<b>Not</b> logged in';
+                        } else {
+                            info.innerHTML = 'Logged in with identityId: ' + output.identityId + '<br>';
+                            var creds = AWS.config.credentials;
+                            creds.params.IdentityId = output.identityId;
+                            creds.params.Logins = {
+                                'cognito-identity.amazonaws.com': output.token
+                            };
+                            creds.expired = true;
+                            var input = {
+                                userId: user.value
+                            };
+                            
+                            AWS.config.credentials.get(function(err) {
+                                if (err) {
+                                    console.log(err, err.stack);
+                                } else if (employed.checked) {
+                                    lambda.invoke({
+                                        FunctionName: 'DFUserListEmployedDorks',
+                                        Payload: JSON.stringify(input)
+                                    }, function(err, data) {
+                                        if (err) {
+                                            console.log(err, err.stack);
+                                        } else {
+                                            var output = JSON.parse(data.Payload);
+                                            if (output.count > 0) {
+                                                info.innerHTML = 'There are ' + output.count + ' employed dorks: <br>' + JSON.stringify(output.employedDorkList);
+                                            } else {
+                                                info.innerHTML = 'Not Employed Dork found!';
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    lambda.invoke({
+                                        FunctionName: 'DFUserListDorks',
+                                        Payload: JSON.stringify(input)
+                                    }, function(err, data) {
+                                        if (err) {
+                                            console.log(err, err.stack);
+                                        } else {
+                                            var output = JSON.parse(data.Payload);
+                                            if (output.count > 0) {
+                                                info.innerHTML = 'There are ' + output.count + ' dorks: <br>' + JSON.stringify(output.dorkList);
+                                            } else {
+                                                info.innerHTML = 'Not Dork found!';
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

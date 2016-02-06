@@ -1,0 +1,45 @@
+// Sidebar
+// refer to www/templates/menu.html for html code
+
+// Left hand Sidebar
+
+.menu-screen, .menu-screen.pane {background:darken($brand-base-color, 10%);}
+
+// Ionic List
+.menu-screen .item-complex .item-content,  .menu-screen .item {background-color: transparent;}
+// Side Menu
+// refer to www/templates/menu.html for html code
+
+// Profile Box
+.menu-screen .profile-box {padding:28px 16px; position:relative;}
+.menu-screen .profile-box-thumb {width:65px; @include border-radius(500px); border:5px solid rgba(255, 255, 255, 0.1); position:absolute;}
+.menu-screen .profile-box-details {margin-left:80px;}
+// .menu-screen .profile-box-details .profile-name, .profile-box-details .profile-location {color:$white;}
+
+// Sidebar Searchbox
+.menu-screen .list.menu-screen-searchbox {  background: darken($brand-base-color, 10%); border-top: 3px solid lighten($brand-contrast-color, 50%); margin-bottom:0;}
+.menu-screen .list.menu-screen-searchbox .item {border:transparent;}
+// .menu-screen .list.menu-screen-searchbox .item.item-input 
+.menu-screen .list.menu-screen-searchbox .item.item-input .placeholder-icon {padding-right: 10px;}
+.menu-screen .group-header {text-transform:uppercase; padding:5px; background-color:darken($brand-base-color, 30%); margin:0; padding:11px 16px;}
+.menu-screen .item-note {font-size:12px; float:none; margin-left:5px; }
+.menu-screen .item .badge {top:7px; right:6px; @include border-radius(500px); min-width:0; border:3px solid rgba(255,255,255,0.15); min-height: 36px; padding-top: 6px;}
+
+//Data Block Representation
+.data-block { position:relative; margin-bottom: 5px; margin-top: 5px;}
+
+.data-block .progress-bar {height:6px; width:100%;}
+
+.data-block.data-icon-left .data-block-title {margin-left:55px}
+.data-block.data-icon-left .icon-left {position: absolute; left: 10px; top: 9px; font-size: 385%; color:$white;	}
+
+.data-block.data-icon-right .data-block-title {margin-right:55px}
+.data-block.data-icon-right .icon-right {position: absolute; right: 10px; top: 9px; font-size: 385%;}
+
+.data-block .data-block-title {margin:3px 0; font-family:$secondary-font-family-base;}
+
+
+
+// Sidebar Footer
+ion-footer-bar.menu-footer-bar, ion-footer-bar.menu-footer-bar .row {padding:0;}
+ion-footer-bar.menu-footer-bar .row .button {font-size:15px; border-width:0;}

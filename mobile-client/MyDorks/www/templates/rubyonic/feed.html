@@ -1,0 +1,64 @@
+<!-- Feed Screen - Refer to feed.scss -->
+<ion-view view-title="Home-Feed" hide-nav-bar="true" class="rubyonic-pane feed-screen">
+  <!-- Custom Header:
+  We did this so we could have a custom bar without 
+  altering ionic's state/history management.
+  Use with 'hide-nav-bar="true"' attribute at line 1: -->
+  <div class="bar bar-ruby-header bar-transparent">
+    <button class="button ruby-button-clear icon ion-navicon brand-base-text-color" menu-toggle="left">
+    	<span class="new-notification-bubble"></span>
+    </button>
+    <h1 class="title brand-base-text-color">Homefeed</h1>
+    <button class="button ruby-button-clear icon ion-android-notifications brand-base-text-color" menu-toggle="right"></button>
+  </div>
+  <!-- End Custom navbar -->
+  <ion-content class="has-header">
+
+  <div class="padding feed ruby">
+  	
+  	<div class="list list-inset form-rb">
+	  <label class="item item-input">
+	    <i class="icon ion-search placeholder-icon"></i>
+	    <input type="text" class="text-color-contrast" placeholder="Hello? Is it me you're looking for?">
+	  </label>
+	</div>
+
+	<div class="feed-item">
+		<div class="feed-media">
+			<img src="img/demo/berry.jpg" class="feed-image">
+			<div class="feed-gradient-overlay"></div>
+			<h4 class="feed-title">Running the distance: Maintaining long distance relationships</h4>
+		</div>
+		<div class="feed-item-details">
+			<div class="feed-stat brand-base-text-color">4 Comments</div> <div class="feed-stat brand-base-text-color">300 Likes</div>
+		</div>
+	</div>
+
+	<div class="feed-item">
+		<div class="feed-media">
+			<img src="img/demo/guitar.jpg" class="feed-image">
+			<div class="feed-gradient-overlay"></div>
+			<h4 class="feed-title">Playing the guitar for beginners</h4>
+		</div>
+		<div class="feed-item-details--poster-type">
+			<img src="img/demo/profile-image.jpg" alt="" class="feed-poster-thumb">
+			<h5 class="feed-posted-by brand-base-color">Posted by Linsey</h5>
+			<h5 class="feed-time-post brand-base-color"><i class="ion-android-time "></i> 1h</h5>
+		</div>
+	</div>
+
+	<div class="feed-item">
+		<div class="feed-media">
+			<img src="img/demo/cherry.jpg" class="feed-image">
+			<div class="feed-gradient-overlay"></div>
+			<h4 class="feed-title">Top antioxidants for your morning workout</h4>
+		</div>
+		<div class="feed-item-details">
+			<div class="feed-stat brand-base-text-color">4 Comments</div> <div class="feed-stat brand-base-text-color">300 Likes</div>
+		</div>
+	</div>
+
+  </div>
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,52 @@
+<!-- Login Screen - refer to login.scss -->
+<ion-view view-title="Login" hide-nav-bar="true">
+  <ion-content class="rubyonic-pane login-screen">
+
+  	<!-- Logo Section - center aligned by default -->
+  	<div class="logo">
+  		<img src="img/rubyonic-logo.png" alt="">
+	</div>
+	<!-- End Logo Section -->
+
+	<!-- A description section. Useful for a short pitch -->
+  	<!-- <h4 class="description">A high-status theme pack for your next Ionic Project</h4> -->
+  	<!-- End description -->
+
+  	<!-- Login Form - note the modifier 'is-transparent' is for the form to be see through -->
+  	<div class="list list-inset login-form is-transparent">
+
+	  <label class="item item-input">
+	  	<i class="icon ion-person placeholder-icon"></i>
+	    <input type="text" placeholder="First Name">
+	  </label>
+
+	  <label class="item item-input">
+	  	<i class="icon ion-locked placeholder-icon"></i>
+	    <input type="text" placeholder="Password">
+	  </label>
+
+	  <div class="button-stack" ng-controller="NavigationCtrl">
+	  	<button class="button button-energized button-block">Login</button>
+	  	<button ng-click="go('app.feed')" class="button button-stable button-block">Skip</button>
+	  	<button class="button button-transparent button-block">Forgot Password?</button>
+	  </div>
+
+	</div>
+	<!-- End Login Form-->
+
+	<!-- Social Login -->
+	<div class="social-login">
+		<h6 class="divider">Social Login</h6>
+		<div class="row">
+			<div class="col">
+				<a href="" class="button button-assertive button-borderless button-block no-margin"><i class="ion-social-google"></i> Gmail</a>
+			</div>
+			<div class="col">
+				<a href="" class="button button-positive button-borderless button-block no-margin"><i class="ion-social-facebook"></i> Facebook</a>
+			</div>
+		</div>
+	</div>
+	<!-- End Social Login -->
+
+  </ion-content>
+</ion-view>

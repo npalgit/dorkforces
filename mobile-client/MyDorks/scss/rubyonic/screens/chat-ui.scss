@@ -1,0 +1,40 @@
+// Single Conversation Chat - 
+// refer to www/templates/chat-ui.html for html code
+
+.chat-window {  margin-top: 40px;}
+.bar.bar-chat .buttons {margin-top: 10px;}
+
+// Chat Conversation UI
+.bar.bar-chat {min-height:75px; border-bottom:4px solid $brand-contrast-color;}
+.bar.bar-chat .title {overflow:visible; margin:0;}
+.bar.bar-chat .button-clear.button-clear {}
+
+// Contact Name, Location, and Thumb
+.chat-contact-thumb {@include border-radius(500px); position:absolute; left:0; top:5px; width:60px; border:5px solid transparentize($brand-analogous-color, 0.65);}
+.chat-bar-contact-name {padding-left:70px; position:relative; padding-top:15px; }
+.chat-bar-contact-name .contact-title{ margin-top:0; margin-bottom:0;}
+
+// Message Bubbles
+.chat-message { padding: 10px; border-radius: 5px;}
+.chat-message img {
+	width:100%;
+	@include border-radius(5px); 
+	@include border-color-contrast($brand-base-color,$color-algorithm); 
+	border-width:5px;
+	border-style:solid;
+}
+.chat-message .chat-label {font-size:10px; text-transform:uppercase; clear:both; opacity:0.7; margin:5px 0; @extend %clearfix;}
+.chat-message .chat-label .text-shift-right {float:right; display:inline-block;}
+.chat-message.is-inbound {margin: 10px 50px 10px 10px; background: transparentize(darken($brand-base-color, 10%), 0.2);}
+.chat-message.is-outbound {margin: 10px 10px 10px 50px; background: transparentize(darken($brand-base-color, 20%), 0.2);}
+
+// Message Input Section
+ion-footer-bar.chat-footer-bar {background:lighten($brand-base-color, 10%); border-top-width:1px; border-top-style:solid; border-top-color:$brand-contrast-color;}
+ion-footer-bar.chat-footer-bar, ion-footer-bar.chat-footer-bar .row {padding:0;}
+ion-footer-bar.chat-footer-bar .button {background:transparent; border:none;}
+.chat-text-input[type="text"] {
+	width:100%; 
+	background:transparent; 
+	// @include input-placeholder($brand-base-color, $color-algorithm);
+	// @include text-color-contrast($brand-base-color, w3c);
+}

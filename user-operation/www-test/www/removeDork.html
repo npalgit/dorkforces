@@ -1,0 +1,121 @@
+<html>
+<head>
+    <title>Sample Terminate Dork Page</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.28.min.js"></script>
+    <script>
+        AWS.config.region = '<REGION>';
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: '<IDENTITY_POOL_ID>'
+        });
+        var lambda = new AWS.Lambda();
+    </script>
+    <h1>Sample Employ Dork Page</h1>
+    <div id="info">
+        Employ Dork
+    </div>
+    <table>
+        <tr>
+        <td>User</td>
+        <td><input type="text" id="user" size="20">
+        </tr>
+        <tr>
+        <td>Password</td>
+        <td><input type="text" id="password" size="20">
+        </tr>
+        <tr>
+        <td>Dork</td>
+        <td><input type="text" id="dork" size="20">
+        </tr>
+        <tr>
+        <td colspan="2">
+            <button id="terminate-button">Terminate Dork</button>
+        </td>
+        </tr>
+            <tr>
+        <td colspan="2" class="center">
+            <a href="index.html">Back</a>
+        </td>
+        </tr>
+    </table>
+    <script>
+        var info = document.getElementById('info');
+        var user = document.getElementById('user');
+        var password = document.getElementById('password');
+        var dork = document.getElementById('dork');
+        var terminateButton = document.getElementById('terminate-button');
+        
+        terminateButton.addEventListener('click', function() {
+            AWS.config.credentials.clearCachedId();
+            
+            info.innerHTML = 'Ready to terminate dork...';
+            if (user.value == null || user.value == '') {
+                info.innerHTML = 'Please specify your user id.';
+            } else if (password.value == null || password.value == '') {
+                info.innerHTML = 'Please specify a password.';
+            } else if (dork.value == null || dork.value == '') {
+                info.innerHTML = 'Please specify your dork id.';
+            } else {
+                var input = {
+                    email: user.value,
+                    password: password.value
+                };
+                
+                lambda.invoke({
+                    FunctionName: 'DFUserAuthLogin',
+                    Payload: JSON.stringify(input)
+                }, function(err, data) {
+                    if (err) {
+                        console.log(err, err.stack);
+                    } else {
+                        var output = JSON.parse(data.Payload);
+                        
+                        console.log('identityId: ' + output.identityId);
+                        console.log('token: ' + output.token);
+                        
+                        if (!output.login) {
+                            info.innerHTML = '<b>Not</b> logged in';
+                        } else {
+                            info.innerHTML = 'Logged in with identityId: ' + output.identityId + '<br>';
+                            var creds = AWS.config.credentials;
+                            creds.params.IdentityId = output.identityId;
+                            creds.params.Logins = {
+                                'cognito-identity.amazonaws.com': output.token
+                            };
+                            creds.expired = true;
+                            var input = {
+                                userId: user.value,
+                                dorkId: dork.value
+                            };
+                            
+                            AWS.config.credentials.get(function(err) {
+                                if (err) {
+                                    console.log(err, err.stack);
+                                } else {
+                                    lambda.invoke({
+                                        FunctionName: 'DFUserRemoveEmployedDork',
+                                        Payload: JSON.stringify(input)
+                                    }, function(err, data) {
+                                        if (err) {
+                                            console.log(err, err.stack);
+                                        } else {
+                                            var output = JSON.parse(data.Payload);
+                                            if (!output.terminated) {
+                                                info.innerHTML = '<b>' + output.errorMessage + '</b>';
+                                            } else {
+                                                info.innerHTML = 'Dork ' + dork.value + ' terminated!';
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

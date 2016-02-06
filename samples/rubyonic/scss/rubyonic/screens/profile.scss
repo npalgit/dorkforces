@@ -1,0 +1,63 @@
+// Profile Styles
+// Refer to www/templates/profile.html
+
+.bar.profile-bar {
+	background-color:rgba(0, 0, 0, 0.5); 
+	border-bottom:0px solid transparent; 
+	border-color:transparent; 
+}
+.bar.profile-bar .title {color:white;}
+
+.profile-background {overflow:hidden; position:relative;}
+.profile-background .profile-wallpaper {} //your image should be big enough to cover the area (about 500px in height)
+.profile-background, .profile-overlay {height:400px;}
+.profile-overlay {
+	z-index:2;
+	position: absolute;
+	width:100%;
+	background-color:transparentize(black, 0.6);	
+}
+
+.profile-details {
+	z-index:3;
+	position: absolute;
+	bottom: 0; width:100%;
+	background-color: transparentize(darken($brand-base-color, 5%), 0.2);
+	color: white;
+}
+
+
+.profile-details .profile-actions{
+	position: absolute;
+	right: 10px;
+	top : 10px;
+}
+
+.profile-details .row {padding:0;}
+.profile-details .row .col {margin-bottom:0;}
+
+.profile-name-title {  border-bottom: 1px solid white; padding-bottom: 10px; margin-top: 0;}
+.profile-thumb {
+	margin: -45px 5px 5px 0;
+	border-radius: 500px;
+	border: 5px solid rgba(255, 255, 255, 0.5);
+	width: 100px;
+}
+
+.profile-stats {
+	padding: 3px 13px 3px 13px;
+	border-width: 1px;
+	border-style: solid;
+	@include border-radius(30px);
+	border-radius: 50px;
+	display: inline-block;
+	margin: 8px 5px 8px 0;
+	white-space: nowrap;
+	font-size: 12px;
+}
+.profile-stats i {padding-right:3px;}
+
+.profile-details-extra {
+	background-color: transparentize($brand-contrast-color, 0.4);
+	margin:-10px 0px;
+}

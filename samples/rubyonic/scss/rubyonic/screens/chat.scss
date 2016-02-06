@@ -1,0 +1,29 @@
+// Chat Interface for Contact List and Conversation
+// refer to www/templates/chat-list.html for html code
+
+// Chat-list
+.chat-list {} 
+.chat-list .item {padding:22px 22px 22px 60px; border-bottom-width:1px; border-bottom-style:solid; border-left:transparent; border-right:transparent; border-top:transparent;} 
+.chat-list .notification-title {}
+.chat-list .item {background: none;}
+.chat-list .item-avatar img:first-child.notification-thumb {border:4px solid $dimmer-space; top: 12px; left: 0; max-width: 50px; max-height: 50px;}
+.chat-list .notification-summary {@include opacity(0.5); font-style:italic; font-size:13px; }
+
+
+// Menu Sidebar Notifications
+.notifications {} 
+.notifications .item {padding:22px 22px 22px 72px;} 
+.notifications .notification-title {}
+.notifications .item-avatar img:first-child.notification-thumb {border:4px solid $dimmer-space; top: 12px; left: 10px; max-width: 50px; max-height: 50px;}
+.notifications .notification-summary {font-style:italic; font-size:13px; @include opacity(0.5);}
+
+// color borders for status messages
+.chat-list .item-avatar.online img:first-child.notification-thumb {border-color:$emerald;}
+.chat-list .item-avatar.busy img:first-child.notification-thumb {border-color:$alizarin;}
+.chat-list .item-avatar.idle img:first-child.notification-thumb {border-color:$sunflower;}
+
+//Footer bar controls
+.tabs.chat-footer-controls {background:darken($brand-base-color, 10%); border-color:transparent; border-width:0;}
+.tabs.chat-footer-controls .tab-item .icon {margin:7px auto 0 auto;}
+.tabs.chat-footer-controls .tab-item {}
+.tabs.chat-footer-controls .tab-item.tab-item-active {background:$brand-base-color;}

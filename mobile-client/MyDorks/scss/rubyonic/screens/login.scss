@@ -1,0 +1,64 @@
+// Login Screen
+// refer to www/templates/login.html for html code
+
+.login-screen {background: url($default-screen-background) no-repeat center top;}
+.login-screen .logo {padding:90px 0 20px 0; text-align: center;}
+.login-screen .logo img {width:70%;}
+.login-screen .description {border-top:1px solid $grey; border-bottom:1px solid $grey; padding:35px; text-align:center; color : $white;}
+.login-screen .login-form {margin:40px 20px 20px 20px ;}
+.login-screen .login-form .is-transparent, .login-screen .login-form.is-transparent, .login-screen .login-form.is-transparent .item {background:none;}
+.login-form.is-transparent .item {border-width:0;}
+.login-form .item.item-input {padding:10px 0 5px 16px;}
+.login-form .item.item-input input {color:$white; border-bottom:1px solid $grey; height:40px; padding-right: 44px; padding-left: 34px; font-size:16px;}
+.login-form .item.item-input i.icon {font-size:18px;position: absolute; left: 25px; top: 15px;}
+
+.login-form .button-stack {padding:20px 0;}
+.social-login .button.button-block {margin:0;}
+
+.title-on-lines {
+  position: relative;
+  text-align: center;
+}
+
+.title-on-lines span {
+  background: $clouds;
+  @include border-radius(5px);
+  padding: 0 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.title-on-lines:before {
+  background: $white;
+  content: "";
+  display: block;
+  height: 1px;
+  position: absolute;
+    top: 50%;
+  width: 100%;
+}
+.title-on-lines:before {
+  left: 0;
+}
+
+.divider{
+        color:#ccc;
+        width:70%;
+        margin:10px auto;
+        overflow:hidden;
+        text-align:center;   
+        line-height:1.2em;
+    }
+
+    .divider:before, .divider:after{
+        content:"";
+        vertical-align:top;
+        display:inline-block;
+        width:50%;
+        height:0.65em;
+        border-bottom:1px solid #ccc;
+        margin:0 2% 0 -55%;
+    }
+    .divider:after{
+        margin:0 -55% 0 2%;
+    }

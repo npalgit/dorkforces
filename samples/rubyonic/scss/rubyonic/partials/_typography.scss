@@ -1,0 +1,35 @@
+/* Setup the default font App-wide */
+
+$font-family-base : Raleway !default;
+$font-src : '../fonts/Raleway-Regular.ttf';
+
+$secondary-font-family-base : Ubuntu !default;
+$secondary-font-src : '../fonts/Ubuntu-Light.ttf';
+
+@font-face {
+    font-family: $font-family-base;
+    src: url($font-src) format('truetype');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: $secondary-font-family-base;
+    src: url($secondary-font-src) format('truetype');
+    font-weight: 200;
+}
+
+body *, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: $font-family-base , Fallback, sans-serif;
+}
+
+.secondary-font {
+  font-family: $secondary-font-family-base , Fallback, sans-serif;
+}
+
+input, button, select, textarea {
+	font-family: $font-family-base , Fallback, sans-serif;
+}
+.bold {font-weight:bold;}
+.text-right {text-align: right;}
+.text-left {text-align: left;}
+.uppercase {text-transform:uppercase;}

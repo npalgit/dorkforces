@@ -1,0 +1,53 @@
+<!-- Post Screen - Refer to viewpost.scss -->
+<ion-view view-title="View Post" hide-nav-bar="true" class="rubyonic-pane view-post-screen">
+  <!-- 
+  setting 'hide-nav-bar="true"' above enables us to create our own header bar
+  by hiding the default one without messing with ionic's state/history management
+  -->
+
+<ion-header-bar align-title="center" class="bar post-bar" ng-controller="NavigationCtrl">
+  <div class="buttons">
+    <button class="button button-clear" ng-click="go('app.feed')">
+      <i class="icon ion-home"></i>
+    </button>
+  </div>
+  <h1 class="title">
+    View Post
+  </h1>
+  <div class="buttons">
+    <button class="button button-clear">
+      <i class="icon ion-share"></i>
+    </button>
+  </div>
+</ion-header-bar>
+
+  <ion-content>
+    
+      <div class="post">
+        <div class="post-overlay"></div>
+        <img class="post-wallpaper" src="img/demo/guitar.jpg" alt="">
+        <div class="post-details">
+          <h3 class="post-title">Rubyonic: Raising the bar with premium Ionic Themes :D</h3>
+          <h4 class="post-by with-thumbnail brand-base-text-color clearfix">
+            <img src="img/demo/profile-image.jpg" class="poster-thumb" alt="">
+            Rachel Rhalson
+            <span class="post-date"><i class="ion-ios-clock-outline"></i> Added 2 days ago</span>
+          </h4>
+        </div>
+      </div>
+
+
+      <!-- Post Content -->
+      <div class="row post-section">
+        <div class="post-content">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor velit quos quam tempore consectetur amet perferendis eveniet quod, doloremque nesciunt iste, nisi exercitationem omnis ab natus! Repudiandae repellendus nisi animi laboriosam modi molestiae vel perspiciatis tempore in amet. Neque assumenda repellendus voluptatem ratione aperiam enim molestias voluptate dicta? Aperiam, sit!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor velit quos quam tempore consectetur amet perferendis eveniet quod, doloremque nesciunt iste, nisi exercitationem omnis ab natus! Repudiandae repellendus nisi animi laboriosam modi molestiae vel perspiciatis tempore in amet. Neque assumenda repellendus voluptatem ratione aperiam enim molestias voluptate dicta? Aperiam, sit!</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor velit quos quam tempore consectetur amet perferendis eveniet quod, doloremque nesciunt iste, nisi exercitationem omnis ab natus! Repudiandae repellendus nisi animi laboriosam modi molestiae vel perspiciatis tempore in amet. Neque assumenda repellendus voluptatem ratione aperiam enim molestias voluptate dicta? Aperiam, sit!</p>
+        </div>
+      </div>
+      <!-- End Post Content -->
+
+
+  </ion-content>
+
+</ion-view>

@@ -1,0 +1,68 @@
+<!-- Tinder Screen - refer to tinder.scss -->
+<ion-view view-title="Tinder Screen" hide-nav-bar="true">
+  <ion-content scroll="false" class="rubyonic-pane tinder-screen brand-base-background-color">
+
+  <!-- Custom Navbar -->
+  <div class="bar bar-ruby-header bar-transparent">
+    <button class="button ruby-button-clear icon ion-navicon brand-base-text-color" menu-toggle="left">
+    	<span class="new-notification-bubble"></span>
+    </button>
+    <h1 class="title brand-base-text-color">Tinder Style 3</h1>
+  </div>
+  <!-- End Custom Navbar -->
+	
+	<!-- Swipe Card Section -->
+	<div ng-controller="JCardsCtrl">
+	<div class="card-deck-message" ng-show="deckIsEmpty">
+		<h2 class="text-color-contrast"><i class="icon ion-alert-circled"></i></h2>
+		<h3 class="text-color-contrast">No more cards, man!</h3>
+		<button ng-click="reload()" class="button button-small button-light">Reload</button>
+	</div>
+	<td-cards control="cardsControl">
+	    <td-card class="ruby-tindercard tinder-style-three"
+	    ng-repeat="card in cards" 
+	    on-destroy="cardDestroyed($index)" 
+	    on-transition-left="cardSwipedLeft($index)" 
+	    on-transition-right="cardSwipedRight($index)" 
+	    on-partial-swipe="cardPartialSwipe(amt)" 
+	    class="card-{{$index}}">
+
+	      <div class="no-text">NOPE</div>
+	      <div class="yes-text">YUP</div>
+
+		<div class="vip-badge" ng-show="card.vipStatus">vip</div>
+		<div class="tinder-thumb">
+			<img ng-src="{{card.image}}">
+		</div>
+		<div class="padding tinder-details">
+			<h3 class="text-left">{{card.title}}</h3>
+			<h5 class="text-left"><i class="icon ion-navigate"></i> {{card.location}}</h5>
+			<p>{{card.description}}</p>
+		</div>
+
+	    </td-card>
+
+	     <div class="ruby-tindercard-controls row">
+			<div class="reject col">
+				<div class="tinder-reject" ng-click="noClick()">
+					<i class="ion-close-round"></i>
+				</div>
+			</div>
+			<div class="info col">
+				<div class="tinder-info" ng-click="reload()">
+					<i class="ion-refresh"></i>
+				</div>
+			</div>
+			<div class="col">
+				<div class="tinder-accept" ng-click="yesClick()">
+					<i class="ion-checkmark"></i>
+				</div>
+			</div>
+		</div>
+
+	    
+
+	  </td-cards>
+
+  </ion-content>
+</ion-view>
