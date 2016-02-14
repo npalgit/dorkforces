@@ -6,7 +6,7 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-var dynamodb = new AWS.DynamoDB();
+var docClient = new AWS.DynamoDB.DocumentClient();
 
 function computeHash(password, salt, fn) {
     // Bytesize
@@ -29,19 +29,18 @@ function computeHash(password, salt, fn) {
 }
 
 function getUser(email, fn) {
-    dynamodb.getItem({
+    docClient.get({
         TableName: config.DDB_TABLE,
         Key: {
-            email: {
-                S: email
-            }
+            email: email
         }
     }, function(err, data) {
-        if (err) return fn(err);
-        else {
+        if (err) {
+            return fn(err);
+        } else {
             if ('Item' in data) {
-                var hash = data.Item.passwordHash.S;
-                var salt = data.Item.passwordSalt.S;
+                var hash = data.Item.passwordHash;
+                var salt = data.Item.passwordSalt;
                 fn(null, hash, salt);
             } else {
                 fn(null, null); // User not found
@@ -51,29 +50,23 @@ function getUser(email, fn) {
 }
 
 function updateUser(email, password, salt, fn) {
-    dynamodb.updateItem({
-            TableName: config.DDB_TABLE,
-            Key: {
-                email: {
-                    S: email
-                }
-            },
-            AttributeUpdates: {
-                passwordHash: {
-                    Action: 'PUT',
-                    Value: {
-                        S: password
-                    }
-                },
-                passwordSalt: {
-                    Action: 'PUT',
-                    Value: {
-                        S: salt
-                    }
-                }
-            }
+    docClient.update({
+        TableName: config.DDB_TABLE,
+        Key: {
+            email: email
         },
-        fn);
+        AttributeUpdates: {
+            passwordHash: {
+                Action: 'PUT',
+                Value: password
+            },
+            passwordSalt: {
+                Action: 'PUT',
+                Value: salt
+            }
+        }
+    },
+    fn);
 }
 
 exports.handler = function(event, context) {

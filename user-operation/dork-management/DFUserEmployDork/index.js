@@ -6,24 +6,14 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-var dynamodb = new AWS.DynamoDB();
-
-// Array contains function
-Array.prototype.contains = function(needle) {
-   for (i in this) {
-       if (this[i] === needle) return true;
-   }
-   return false;
-}
+var docClient = new AWS.DynamoDB.DocumentClient();
 
 // Get DFUserProfiles table item by matching 'userId'
 function getUserProfile(id, fn) {
-    dynamodb.getItem({
+    docClient.get({
         TableName: config.DDB_PROFILE_TABLE,
         Key: {
-            userId: {
-                S: id
-            }
+            userId: id
         }
     }, function(err, data) {
         if (err) return fn(err, null);
@@ -40,12 +30,10 @@ function getUserProfile(id, fn) {
 
 // Get DFDorks table item by matching 'dorkId'
 function getDork(id, fn) {
-    dynamodb.getItem({
+    docClient.get({
         TableName: config.DDB_DORK_TABLE,
         Key: {
-            dorkId: {
-                S: id
-            }
+            dorkId: id
         }
     }, function(err, data) {
         if (err) return fn(err, null);
@@ -62,25 +50,16 @@ function getDork(id, fn) {
 // Create a DFConversations table item for the employer and employee
 function createExecConversation(userId, dorkId, fn) {
     // The 'id' key value is created by concatenating userId and dorkId
-    var conversationId = 'user:' + userId + ':dork:' + dorkId;
-    dynamodb.putItem({
+    var conversationId = 'ex:' + 'u:' + userId + ':d:' + dorkId;
+    docClient.put({
         TableName: config.DDB_CONVERSATION_TABLE,
         Item: {
-            conversationId: {
-                S: conversationId
-            },
-            msgCount: {
-                N: '0'
-            },
-            users: {
-                SS: [userId]
-            },
-            dorks: {
-                SS: [dorkId]
-            },
-            type: {
-                S: 'Executive'      // direct line of communication between an employer and employee
-            }
+            conversationId: conversationId,
+            msgCount: 0,
+            users: [userId],
+            dorks: [dorkId],
+            history: [],
+            type: 'Executive'      // direct line of communication between an employer and employee
         },
         ConditionExpression: 'attribute_not_exists (conversationId)'
     }, function(err, data) {
@@ -94,17 +73,15 @@ function createExecConversation(userId, dorkId, fn) {
 
 // Update the DFUserProfile table item by appending to the 'conversations' and 'dorks' fields
 function updateUserProfile(userId, dorkId, conversationId, fn) {
-    dynamodb.updateItem({
+    docClient.update({
             TableName: config.DDB_PROFILE_TABLE,
             Key: {
-                userId: {
-                    S: userId
-                }
+                userId:userId
             },
-            UpdateExpression: "ADD employedDorks :newDork, conversations :newConv",
+            UpdateExpression: "SET employedDorks=list_append(employedDorks, :newDork), conversations=list_append(conversations, :newConv)",
             ExpressionAttributeValues: { 
-                ":newDork": {SS: [dorkId]},
-                ":newConv": {SS: [conversationId]}
+                ":newDork": [dorkId],
+                ":newConv": [conversationId]
             }
         }, fn);
 }
@@ -112,23 +89,15 @@ function updateUserProfile(userId, dorkId, conversationId, fn) {
 // Create a DFEmployed table item for the employer and employee
 function createEmployed(userId, dorkId, fn) {
     // The 'id' key value is created by concatenating userId and dorkId
-    var employeeId = 'user:' + userId + ':dork:' + dorkId;  // same as the "P0" conversationId
+    var employeeId = 'ex:' + 'u:' + userId + ':d:' + dorkId;  // same as the "Executive" conversationId
     var date = new Date();
-    dynamodb.putItem({
+    docClient.put({
         TableName: config.DDB_EMPLOYED_TABLE,
         Item: {
-            employeeId: {
-                S: employeeId
-            },
-            userId: {
-                S: userId
-            },
-            dorkId: {
-                S: dorkId
-            },
-            hiredDate: {
-                S: date.toString()
-            }
+            employeeId: employeeId,
+            userId: userId,
+            dorkId: dorkId,
+            hiredDate: date.toString()
         },
         ConditionExpression: 'attribute_not_exists (employeeId)'
     }, fn);
@@ -176,9 +145,9 @@ exports.handler = function(event, context) {
         } else if (!userProfile) {
             context.fail('404: Not Found - Cannot find the userProfile with id of ' + userId);
         //} else if (userProfile.employedDorks.contains(dorkId)) {
-        } else if (userProfile.employedDorks.SS.indexOf(dorkId) >= 0) {
+        } else if (userProfile.employedDorks.indexOf(dorkId) >= 0) {
             // Make sure this dork is not already employed
-            context.fail('405: Method Not Allowed - Dork is already employed by this user: ' + err);
+            context.fail('405: Method Not Allowed - Dork is already employed by this user.');
         } else {
             // Try to find the corresponding dork
             getDork(dorkId, function(err, dork) {
@@ -187,14 +156,14 @@ exports.handler = function(event, context) {
                 } else if (!dork) {
                     context.fail('404: Not Found - Cannot find the dork with id of ' + dorkId);
                 } else {
-                    console.log('Dork found, ready to employ: ' + dork.name.S);
+                    console.log('Dork found, ready to employ: ' + dork.name);
                     employDork(userId, dorkId, function(err) {
                         if (err) {
                             context.fail('405: Method Not Allowed - Error in employDork: ' + err);
                         } else {
                             context.succeed({
                                 employed: true,
-                                employeeId: 'user:' + userId + ':dork:' + dorkId
+                                employeeId: 'ex:' + 'u:' + userId + ':d:' + dorkId
                             });
                         }
                     });

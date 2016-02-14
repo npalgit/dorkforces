@@ -17,13 +17,15 @@ exports.handler = function(event, context) {
     // pull messages from the corresponding SQS queue
     var params = {
         QueueUrl: u2dQueueUrl,
-        MaxNumberOfMessages: 10
+        MaxNumberOfMessages: 10,
+        VisibilityTimeout: 5        // make sure we have enough time to process the messages and later delete them
     };
     
     sqs.receiveMessage(params, function(err, data) {
         if (err) {
             context.fail('404: Not Found - Error in sqs.recvMessage: ' + err);
         } else {
+            console.log("There're totally " + data.Messages.length + " messages received.");
             for (var i = 0; i < data.Messages.length; i++) {
                 console.log("#" + i + " message : " + data.Messages[i].Body);
                 sqs.deleteMessage({
@@ -31,8 +33,11 @@ exports.handler = function(event, context) {
                     ReceiptHandle: data.Messages[i].ReceiptHandle
                 }, function(err, data) {
                     if (err) {
+                        console.log("Error in sqs.deleteMessage: " + err);
                         console.log(err, err.stack);
                         context.fail('403: Forbidden - Error in sqs.deleteMessage: ' + err);
+                    } else {
+                        console.log("#" + i + " message deleted.");
                     }
                 });
             }

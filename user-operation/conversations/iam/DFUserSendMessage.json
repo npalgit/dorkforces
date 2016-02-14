@@ -28,6 +28,13 @@
             "Resource": "*"
         },
         {
+            "Effect": "Allow",
+            "Action": [
+                "cognito-identity:*"
+            ],
+            "Resource": "arn:aws:cognito-identity:us-east-1:699582799620:identitypool/*"
+        },
+        {
             "Sid": "",
             "Resource": "*",
             "Action": [

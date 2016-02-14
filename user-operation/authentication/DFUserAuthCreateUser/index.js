@@ -7,7 +7,7 @@ var util = require('util');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-var dynamodb = new AWS.DynamoDB();
+var docClient = new AWS.DynamoDB.DocumentClient();
 var ses = new AWS.SES();
 
 function computeHash(password, salt, fn) {
@@ -20,12 +20,18 @@ function computeHash(password, salt, fn) {
     } else {
         fn = salt;
         crypto.randomBytes(len, function(err, salt) {
-            if (err) return fn(err);
-            salt = salt.toString('base64');
-            crypto.pbkdf2(password, salt, iterations, len, function(err, derivedKey) {
-                if (err) return fn(err);
-                fn(null, salt, derivedKey.toString('base64'));
-            });
+            if (err) {
+                return fn(err);
+            } else {
+                salt = salt.toString('base64');
+                crypto.pbkdf2(password, salt, iterations, len, function(err, derivedKey) {
+                    if (err) {
+                        return fn(err);
+                    } else {
+                        fn(null, salt, derivedKey.toString('base64'));
+                    }
+                });
+            }
         });
     }
 }
@@ -34,32 +40,28 @@ function storeUser(email, password, salt, fn) {
     // Bytesize
     var len = 128;
     crypto.randomBytes(len, function(err, token) {
-        if (err) return fn(err);
-        token = token.toString('hex');
-        dynamodb.putItem({
-            TableName: config.DDB_TABLE,
-            Item: {
-                email: {
-                    S: email
+        if (err) {
+            return fn(err);
+        } else {
+            token = token.toString('hex');
+            docClient.put({
+                TableName: config.DDB_TABLE,
+                Item: {
+                    email: email,
+                    passwordHash: password,
+                    passwordSalt: salt,
+                    verified: false,
+                    verifyToken: token
                 },
-                passwordHash: {
-                    S: password
-                },
-                passwordSalt: {
-                    S: salt
-                },
-                verified: {
-                    BOOL: false
-                },
-                verifyToken: {
-                    S: token
+                ConditionExpression: 'attribute_not_exists (email)'
+            }, function(err, data) {
+                if (err) {
+                    return fn(err);
+                } else {
+                    fn(null, token);
                 }
-            },
-            ConditionExpression: 'attribute_not_exists (email)'
-        }, function(err, data) {
-            if (err) return fn(err);
-            else fn(null, token);
-        });
+            });
+        }
     });
 }
 

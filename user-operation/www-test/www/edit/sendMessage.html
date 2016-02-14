@@ -97,7 +97,7 @@
                                     var input = {
                                         userId: user.value,
                                         conversationId: 'user:' + user.value + ':dork:' + dork.value,
-                                        message: message,
+                                        message: {text: message.value, link: ''},
                                         precedence: 0,
                                         demandingHuman: false
                                     };

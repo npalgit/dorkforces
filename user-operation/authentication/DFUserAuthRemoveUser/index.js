@@ -6,7 +6,6 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-//var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 // Get DFUserProfiles table item by matching 'userId'
@@ -84,8 +83,9 @@ exports.handler = function(event, context) {
             /*
              * Loop through the "employedDorks" set field and delete all related DFConversations and DFEmployed table items
              */
-            for (var i = 0; i < userProfile.employedDorks.values.length; i++) {
-                var conversationId = 'user:' + userId + ':dork:' + userProfile.employedDorks.values[i];
+            for (var i = 0; i < userProfile.employedDorks.length; i++) {
+                var idPrefix = (userProfile.employedDorks[i].indexOf('sys.dorks') > 0)? 'sm:' : 'ex:';
+                var conversationId = idPrefix + 'u:' + userId + ':d:' + userProfile.employedDorks[i];
                 var employeeId = conversationId;
                 
                 removeConversation(conversationId, function(err) {

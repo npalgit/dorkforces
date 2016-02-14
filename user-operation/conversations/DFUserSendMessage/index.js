@@ -5,6 +5,7 @@ var AWS = require('aws-sdk');
 var config = require('./config.json');
 var sqs = new AWS.SQS();
 var sns = new AWS.SNS();
+var cognitoidentity = new AWS.CognitoIdentity();
 
 // Get reference to AWS clients
 var docClient = new AWS.DynamoDB.DocumentClient();
@@ -51,7 +52,7 @@ function logUserMessage(userId, msgTableName, conversationId, msgIndex, preceden
             talkerId: userId,
             precedence: precedence,
             timestamp: timestamp,
-            message: message
+            message: message.text
         }
     }, function(err, data) {
         if (err) {
@@ -70,6 +71,27 @@ exports.handler = function(event, context) {
     var queueUrl = event.demandingHuman? u2hQueueUrl : u2dQueueUrl;
     var topicArn = event.demandingHuman? u2hTopicArn : u2dTopicArn;
     
+    console.log("Context object: " + JSON.stringify(context));
+    
+    // Make sure user is who he says he is
+    var params = {
+        IdentityPoolId: context.identity.cognitoIdentityPoolId,
+        IdentityId: context.identity.cognitoIdentityId,
+        MaxResults: 10,
+        NextToken: null
+    };
+    cognitoidentity.lookupDeveloperIdentity(params, function(err, data) {
+        if (err) {
+            console.log("Error in cognitoidentity.lookupDeveloperIdentity: " + err);
+        } else {
+            console.log("lookupDeveloperIdentity returns: " + JSON.stringify(data));
+            // Verify the specified userId included in the DeveloperUserIdentifierList
+            if (data.DeveloperUserIdentifierList.indexOf(userId) < 0) {
+                context.fail('401: Unauthorized - userId does not match any cognito identity: ' + JSON.stringify(data.DeveloperUserIdentifierList));
+            }
+        }
+    });
+    
     /*
      * This is the first stop of the message-routing path. Here we don't actually process the message, but
      * instead we do a few things:
@@ -86,8 +108,8 @@ exports.handler = function(event, context) {
             context.fail('403: Forbidden - Error in updateConversation: ' + err);
         } else {
             var today = new Date();
-            var year = today.getUTCFullYear().toString();               // e.g. "2016""
-            var month = ("00" + today.getUTCMonth() + 1).slice(-3);     // e.g. "01", "02", ... "12" 
+            var year = today.getUTCFullYear().toString();                   // e.g. "2016""
+            var month = ("0" + (today.getUTCMonth() + 1)).slice(-2);        // e.g. "01", "02", ... "12" 
             var msgTableName = config.DDB_MESSAGE_TABLE + '-' + conversationType + '-' + year + '-' + month;    // e.g. "DFMessages-System-2016-02"
             var timestamp = today.toString();
             
@@ -128,14 +150,14 @@ exports.handler = function(event, context) {
                      * in the message receive function, but since AWS SQS SDK currently doesn't support StringListValues
                      * as a MessageAttribute, we do it this way for simplicity.
                      */
-                    for (var i = 0; i < dorks.values.length; i++) {
+                    for (var i = 0; i < dorks.length; i++) {
                         var params = {
                             MessageBody: message.text,
                             QueueUrl: queueUrl,
                             MessageAttributes: {
                                 userId: {DataType: 'String', StringValue: userId},
                                 conversationId: {DataType: 'String', StringValue: conversationId},
-                                dorkId: {DataType: 'String', StringValue: dorks.values[i]}
+                                dorkId: {DataType: 'String', StringValue: dorks[i]}
                             }
                         };
                         

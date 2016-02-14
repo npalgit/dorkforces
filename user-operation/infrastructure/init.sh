@@ -107,4 +107,23 @@ aws cognito-identity set-identity-pool-roles \
   --region $REGION
 echo "Setting identity pool roles end"
 
+# Create SQS queues for U2H and U2D conversations
+echo "Creating U2H SQS queue begin..."
+aws sqs create-queue --queue-name $SQS_MESSAGE_U2H \
+    --attributes MessageRetentionPeriod=1209600
+sleep 1 # To avoid errors
+echo "Creating U2H SQS queue end"
+
+echo "Creating U2D SQS queue begin..."
+aws sqs create-queue --queue-name $SQS_MESSAGE_U2D \
+    --attributes MessageRetentionPeriod=345600
+sleep 1 # To avoid errors
+echo "Creating U2D SQS queue end"
+
+# Create SNS topics for U2H and U2D conversations
+# echo "Creating U2H and U2D SNS topics begin..."
+# aws sns create-topic --name u2h-msg
+# aws sns create-topic --name u2d-msg
+# echo "Creating U2H and U2D SNS topics end"
+
 rm ./config.json

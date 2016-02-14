@@ -6,7 +6,6 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-//var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
 var cognitoidentity = new AWS.CognitoIdentity();
 
@@ -17,15 +16,21 @@ function computeHash(password, salt, fn) {
 
     if (3 == arguments.length) {
         crypto.pbkdf2(password, salt, iterations, len, function(err, derivedKey) {
-            if (err) return fn(err);
-            else fn(null, salt, derivedKey.toString('base64'));
+            if (err) {
+                return fn(err);
+            } else {
+                fn(null, salt, derivedKey.toString('base64'));
+            }
         });
     } else {
         fn = salt;
         crypto.randomBytes(len, function(err, salt) {
-            if (err) return fn(err);
-            salt = salt.toString('base64');
-            computeHash(password, salt, fn);
+            if (err) {
+                return fn(err);
+            } else {
+                salt = salt.toString('base64');
+                computeHash(password, salt, fn);
+            }
         });
     }
 }

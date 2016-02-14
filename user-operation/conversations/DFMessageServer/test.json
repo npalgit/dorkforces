@@ -1,0 +1,9 @@
+{
+    "conversationId": "sm:u:xuechen.yang@gmail.com:d:donna@sys.dorks.dorkforces.com",
+    "userId": "xuechen.yang@gmail.com",
+    "message": {
+        "text": "Hello!"
+    },
+    "precedence": 0,
+    "demandingHuman": false
+}

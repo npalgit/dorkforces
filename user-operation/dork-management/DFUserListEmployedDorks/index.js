@@ -38,9 +38,9 @@ exports.handler = function(event, context) {
             context.fail('404: Not Found - Cannot find the userProfile with id of ' + userId);
         } else {
             var keys = [];
-            for (var i = 0; i < userProfile.employedDorks.values.length; i++) {
+            for (var i = 0; i < userProfile.employedDorks.length; i++) {
                 keys[i] = {
-                    dorkId: userProfile.employedDorks.values[i]
+                    dorkId: userProfile.employedDorks[i]
                 }
             }
             var dorkTableName = config.DDB_DORK_TABLE;      // dynamodb.batchGet() uses table name as field name

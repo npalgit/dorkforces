@@ -6,16 +6,14 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-var dynamodb = new AWS.DynamoDB();
+var docClient = new AWS.DynamoDB.DocumentClient();
 
 // Get DFUserProfiles table item by matching 'userId'
 function getUserProfile(id, fn) {
-    dynamodb.getItem({
+    docClient.get({
         TableName: config.DDB_PROFILE_TABLE,
         Key: {
-            userId: {
-                S: id
-            }
+            userId: id
         }
     }, function(err, data) {
         if (err) return fn(err, null);
@@ -31,12 +29,10 @@ function getUserProfile(id, fn) {
 
 // Get DFDorks table item by matching 'dorkId'
 function getDork(id, fn) {
-    dynamodb.getItem({
+    docClient.get({
         TableName: config.DDB_DORK_TABLE,
         Key: {
-            dorkId: {
-                S: id
-            }
+            dorkId: id
         }
     }, function(err, data) {
         if (err) return fn(err, null);
@@ -51,30 +47,26 @@ function getDork(id, fn) {
 }
 
 // Update the DFUserProfile table item by removing the 'conversations' and 'dorks' elements
-function updateUserProfile(userId, dorkId, conversationId, fn) {
-    dynamodb.updateItem({
+function updateUserProfile(userId, conversations, employedDorks, fn) {
+    docClient.update({
             TableName: config.DDB_PROFILE_TABLE,
             Key: {
-                userId: {
-                    S: userId
-                }
+                userId: userId
             },
-            UpdateExpression: "DELETE employedDorks :dork, conversations :conv",
+            UpdateExpression: "SET employedDorks=:dorks, conversations=:convs",
             ExpressionAttributeValues: { 
-                ":dork": {SS: [dorkId]},
-                ":conv": {SS: [conversationId]}
+                ":dorks": employedDorks,
+                ":convs": conversations
             }
         }, fn);
 }
 
 // Remove the DFConversations table item for the employer and employee
 function removeExecConversation(id, fn) {
-    dynamodb.deleteItem({
+    docClient.delete({
         TableName: config.DDB_CONVERSATION_TABLE,
         Key: {
-            conversationId: {
-                S: id
-            }
+            conversationId: id
         },
         ConditionExpression: 'attribute_exists (conversationId)'
     }, fn);
@@ -82,33 +74,45 @@ function removeExecConversation(id, fn) {
 
 // Remove a DFEmployed table item for the employer and employee
 function removeEmployed(id, fn) {
-    dynamodb.deleteItem({
+    docClient.delete({
         TableName: config.DDB_EMPLOYED_TABLE,
         Key: {
-            employeeId: {
-                S: id
-            }
+            employeeId: id
         },
         ConditionExpression: 'attribute_exists (employeeId)'
     }, fn);
 }
 
 // Remove employment binding relationship between user and dork
-function terminateDork(userId, dorkId, fn) {
+function terminateDork(userProfile, dorkId, fn) {
     /*
      * We need to do a few things to terminate employment relationship between a user and a dork:
      *
      *      1. Remove dork's id from the "employedDorks" field in the corresponding DFUserProfile table item
-     *      2. Remove P0 conversation's id from the "conversations" field in the corresponding DFUserProfile table item
+     *      2. Remove Executive conversation's id from the "conversations" field in the corresponding DFUserProfile table item
      *      3. Remove the DFEmployed table item
      *      4. Remove the DFConversation table item
      * 
      * Note that messages will not be explicitly deleted. They will remain in the database and eventually expire.
      */
-    var conversationId = 'user:' + userId + ':dork:' + dorkId;
-    var employeeId = conversationId;    // same as the "P0" conversationId
+    var userId = userProfile.userId;
+    var conversations = userProfile.conversations;
+    var employedDorks = userProfile.employedDorks;
+    var conversationId = 'ex:' + 'u:' + userId + ':d:' + dorkId;
+    var employeeId = conversationId;    // same as the "Executive" conversationId
+    var index = -1;
     
-    updateUserProfile(userId, dorkId, conversationId, function(err, data) {
+    // Dynamodb doesn't support removing a value from list, we have to construct the new value beforehand
+    index = conversations.indexOf(conversationId);
+    if (index >= 0) {
+        conversations.splice(index, 1); 
+    }
+    index = employedDorks.indexOf(dorkId);
+    if (index >= 0) {
+        employedDorks.splice(index, 1); 
+    }
+    
+    updateUserProfile(userId, conversations, employedDorks, function(err, data) {
         if (err) {
             return fn(err);
         } else {
@@ -138,9 +142,9 @@ exports.handler = function(event, context) {
             context.fail('400: Bad Request - Error in getUserProfile: ' + err);
         } else if (!userProfile) {
             context.fail('404: Not Found - Cannot find the userProfile with id of ' + userId);
-        } else if (userProfile.employedDorks.SS.indexOf(dorkId) < 0) {
+        } else if (userProfile.employedDorks.indexOf(dorkId) < 0) {
             // Make sure this dork is indeed employed
-            context.fail('405: Method Not Allowed - Dork is not employed by this user: ' + err);
+            context.fail('405: Method Not Allowed - Dork is not employed by this user.');
         } else {
             // Try to find the corresponding dork
             getDork(dorkId, function(err, dork) {
@@ -148,11 +152,11 @@ exports.handler = function(event, context) {
                     context.fail('400: Bad Request - Error in getDork: ' + err);
                 } else if (!dork) {
                     context.fail('404: Not Found - Cannot find the dork with id of ' + dorkId);
-                } else if (dork.isSystem.BOOL) {
+                } else if (dork.isSystem) {
                     context.fail('403: Forbidden - Cannot terminate a system dork!');
                 } else {
-                    console.log('Dork found, ready to fire: ' + dork.name.S);
-                    terminateDork(userId, dorkId, function(err) {
+                    console.log('Dork found, ready to fire: ' + dork.name);
+                    terminateDork(userProfile, dorkId, function(err) {
                         if (err) {
                             context.fail('405: Method Not Allowed - Error in terminateDork: ' + err);
                         } else {

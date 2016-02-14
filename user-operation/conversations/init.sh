@@ -86,31 +86,16 @@ for f in $(ls -1|grep ^DF); do
   echo "Creating function $f end"
 done
 
-# Create SQS queues for U2H and U2D conversations
-# echo "Creating U2H SQS queue begin..."
-# aws sqs create-queue --queue-name $SQS_MESSAGE_U2H \
-#     --attributes MessageRetentionPeriod=1209600
-# sleep 1 # To avoid errors
-# echo "Creating U2H SQS queue end"
-
-# echo "Creating U2D SQS queue begin..."
-# aws sqs create-queue --queue-name $SQS_MESSAGE_U2D \
-#     --attributes MessageRetentionPeriod=345600
-# sleep 1 # To avoid errors
-# echo "Creating U2D SQS queue end"
-
-# Grant SNS topic "u2d-msg" permission to invoke DFDorkRecvMessage
-for f in $(ls -1|grep ^DFDork); do
-  echo "Grant permission to SNS topic begin..."
-#   aws lambda add-permission --function-name arn:aws:lambda:$REGION:$AWS_ACCOUNT_ID:function:${f} \
-  aws lambda add-permission --function-name ${f} \
-      --statement-id $STATEMENT_ID \
-      --action lambda:InvokeFunction \
-      --principal sns.amazonaws.com \
-      --source-arn arn:aws:sns:$REGION:$AWS_ACCOUNT_ID:$SNS_TOPIC_U2D_MESSAGE
-    sleep 1 # To avoid errors
-  echo "Grant permission to SNS topic $f end"
-done
+# Subscribe DFDorkRecvMessage to  SNS topic "u2d-msg"
+# for f in $(ls -1|grep ^DFDork); do
+#   echo "Subscribe to SNS topic begin..."
+#   aws sns subscribe \
+#       --topic-arn arn:aws:sns:$REGION:$AWS_ACCOUNT_ID:$SNS_TOPIC_U2D_MESSAGE \
+#       --protocol lambda \
+#       --notification-endpoint arn:aws:lambda:$REGION:$AWS_ACCOUNT_ID:function:${f}
+#     sleep 1 # To avoid errors
+#   echo "Subscribe to SNS topic $f end"
+# done
 
 rm ./config.json
 

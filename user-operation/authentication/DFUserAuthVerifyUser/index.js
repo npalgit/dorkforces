@@ -6,21 +6,7 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-//var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
-
-// Javascript implementation of Java's String.hashCode() method:
-// http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-String.prototype.hashCode = function(){
-    var hash = 0;
-    if (this.length == 0) return hash;
-    for (i = 0; i < this.length; i++) {
-        char = this.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-}
 
 function getUser(email, fn) {
     docClient.get({
@@ -49,7 +35,7 @@ function getUser(email, fn) {
 // Create a DFConversations table item for the employer and system employee
 function createSysConversation(userId, dorkId, fn) {
     // The 'id' key value is created by concatenating userId and dorkId
-    var conversationId = 'user:' + userId + ':dork:' + dorkId;
+    var conversationId = 'sm:' + 'u:' + userId + ':d:' + dorkId;
     docClient.put({
         TableName: config.DDB_CONVERSATION_TABLE,
         Item: {
@@ -57,6 +43,7 @@ function createSysConversation(userId, dorkId, fn) {
             msgCount: 0,
             users: [userId],
             dorks: [dorkId],
+            history: [],
             type: 'System'     // line of communication between an employer and employee
         }
     }, fn);
@@ -65,7 +52,7 @@ function createSysConversation(userId, dorkId, fn) {
 // Create a DFEmployed table item for the employer and system employee
 function createSysEmployed(userId, dorkId, fn) {
     // The 'id' key value is created by concatenating userId and dorkId
-    var employeeId = 'user:' + userId + ':dork:' + dorkId; // same as the "SYS" conversationId
+    var employeeId = 'sm:' + 'u:' + userId + ':d:' + dorkId; // same as the "SYS" conversationId
     var date = new Date();
     docClient.put({
         TableName: config.DDB_EMPLOYED_TABLE,
@@ -80,7 +67,7 @@ function createSysEmployed(userId, dorkId, fn) {
 
 // Create a DFUserProfile table item for the verified user
 function createUserProfile(id, email, fn) {
-    var sysConversationId = 'user:' + id + ':dork:' + config.SYS_DORK;
+    var sysConversationId = 'sm:' + 'u:' + id + ':d:' + config.SYS_DORK;
     docClient.put({
         TableName: config.DDB_PROFILE_TABLE,
         Item: {
@@ -91,41 +78,41 @@ function createUserProfile(id, email, fn) {
             conversations: [sysConversationId]
         }
     }, function(err, data) {
-            if (err) {
-                return fn(err, null);
-            } else {
-                 createSysConversation(id, config.SYS_DORK, function(err, data) {
-                    if (err) {
-                        return fn(err, null);
-                    } else {
-                        createSysEmployed(id, config.SYS_DORK, fn);
-                    }
-                });
-            }
+        if (err) {
+            return fn(err, null);
+        } else {
+            createSysConversation(id, config.SYS_DORK, function(err, data) {
+                if (err) {
+                    return fn(err, null);
+                } else {
+                    createSysEmployed(id, config.SYS_DORK, fn);
+                }
+            });
+        }
     });
 }
 
 function updateUser(email, fn) {
     docClient.update({
-            TableName: config.DDB_TABLE,
-            Key: {
-                email: email
+        TableName: config.DDB_TABLE,
+        Key: {
+            email: email
+        },
+        AttributeUpdates: {
+            verified: {
+                Action: 'PUT',
+                Value: true
             },
-            AttributeUpdates: {
-                verified: {
-                    Action: 'PUT',
-                    Value: true
-                },
-                verifyToken: {
-                    Action: 'DELETE'
-                }
+            verifyToken: {
+                Action: 'DELETE'
             }
-        }, function(err, data) {
-                if (err) {
-                    return fn(err, null);
-                } else {
-                    createUserProfile(email, email, fn);
-                }
+        }
+    }, function(err, data) {
+            if (err) {
+                return fn(err, null);
+            } else {
+                createUserProfile(email, email, fn);
+            }
     });
 }
 

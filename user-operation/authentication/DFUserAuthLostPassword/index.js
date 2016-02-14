@@ -6,16 +6,14 @@ var crypto = require('crypto');
 var config = require('./config.json');
 
 // Get reference to AWS clients
-var dynamodb = new AWS.DynamoDB();
+var docClient = new AWS.DynamoDB.DocumentClient();
 var ses = new AWS.SES();
 
 function getUser(email, fn) {
-    dynamodb.getItem({
+    docClient.get({
         TableName: config.DDB_TABLE,
         Key: {
-            email: {
-                S: email
-            }
+            email: email
         }
     }, function(err, data) {
         if (err) return fn(err);
@@ -33,28 +31,29 @@ function storeLostToken(email, fn) {
     // Bytesize
     var len = 128;
     crypto.randomBytes(len, function(err, token) {
-        if (err) return fn(err);
-        token = token.toString('hex');
-        dynamodb.updateItem({
+        if (err) {
+            return fn(err);
+        } else {
+            token = token.toString('hex');
+            docClient.update({
                 TableName: config.DDB_TABLE,
                 Key: {
-                    email: {
-                        S: email
-                    }
+                    email: email
                 },
                 AttributeUpdates: {
                     lostToken: {
                         Action: 'PUT',
-                        Value: {
-                            S: token
-                        }
+                        Value: token
                     }
                 }
-            },
-         function(err, data) {
-            if (err) return fn(err);
-            else fn(null, token);
-        });
+            }, function(err, data) {
+                if (err) {
+                    return fn(err);
+                } else {
+                    fn(null, token);
+                }
+            });
+        }
     });
 }
 
