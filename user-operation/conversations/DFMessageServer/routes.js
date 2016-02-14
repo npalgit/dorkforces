@@ -21,7 +21,7 @@ function getConversation(req, res, next) {
         }
     }, function(err, data) {
         if (err) {
-            res.send(404, 'Conversation not found with error: ' + err);
+            res.status(404).send('404: Conversation not found with error: ' + err);
         } else {
             res.json(data);
         }
@@ -50,7 +50,7 @@ function getMessages(req, res, next) {
             }
         }, function(err, data) {
             if (err) {
-                res.send(404, 'Messages not found: ' + err);
+                res.status(404).send('404: Messages not found: ' + err);
             } else {
                 res.json(data);
             }
@@ -65,7 +65,7 @@ function getMessages(req, res, next) {
             }
         }, function(err, data) {
             if (err) {
-                res.send(404, 'Messages not found: ' + err);
+                res.status(404).send('404: Messages not found: ' + err);
             } else {
                 res.json(data);
             }
@@ -81,7 +81,7 @@ function getMessages(req, res, next) {
             }
         }, function(err, data) {
             if (err) {
-                res.send(404, 'Messages not found: ' + err);
+                res.status(404).send('404: Messages not found: ' + err);
             } else {
                 res.json(data);
             }
@@ -139,13 +139,13 @@ function postMessage(req, res, next) {
     
     conversationMgr.updateConversation(conversationId, msgPeriod, function(err, msgCount, msgIndex, dorks) {
         if (err) {
-            res.send(403, '403: Forbidden - Error in updateConversation: ' + err);
+            res.status(403).send('403: Forbidden - Error in updateConversation: ' + err);
         } else {
             console.log("Target message table name is: " + msgTableName);
             
             conversationMgr.logUserMessage(userId, msgTableName, conversationId, msgIndex, precedence, timestamp, message, function(err, data) {
                 if (err) {
-                    res.send(403, '403: Forbidden - Error in logUserMessage: ' + err);
+                    res.status(403).send('403: Forbidden - Error in logUserMessage: ' + err);
                 } else {
                     /*
                      * In order to push message to the corresponding SQS queue, we need to re-format the message
@@ -194,7 +194,7 @@ function postMessage(req, res, next) {
                         
                         sqs.sendMessage(params, function(err, data) {
                             if (err) {
-                                res.send(403, '403: Forbidden - Error in sqs.sendMessage: ' + err);
+                                res.status(403).send('403: Forbidden - Error in sqs.sendMessage: ' + err);
                             } else {
                                 // do nothing, we're not done yet
                             }
@@ -210,7 +210,7 @@ function postMessage(req, res, next) {
 
 module.exports = function(app) {
     app.route('/').get(function(req, res, next) {
-        res.send('<html><head>'
+        res.status(200).send('<html><head>'
                     + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
                     + '<title>' + 'DFMessageServer' + '</title>'
                     + '</head><body>'

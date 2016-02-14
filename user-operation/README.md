@@ -1,24 +1,7 @@
-## LambdAuth
+## Dorkforces - User Management and Client-side Operation
 
-[![Join the chat at https://gitter.im/danilop/LambdAuth](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/danilop/LambdAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-A sample authentication service implemented with a server-less architecture, using [AWS Lambda](http://aws.amazon.com/lambda/) to host and execute the code and [Amazon DynamoDB](http://aws.amazon.com/dynamodb/) as persistent storage. This provides a cost-efficient solution that is scalable and highly available.
-
-The authentication can be used with [Amazon Cognito](http://aws.amazon.com/cognito/) to assume an Authenticated Role via [Developer Authenticated Identities](http://docs.aws.amazon.com/cognito/devguide/identity/developer-authenticated-identities/).
-
-The basic functions implemented are:
-- new user creation, an email is sent to validate the email address provided
-- login, getting back an authentication "token" that can be used with Amazon Cognito to assume an Authenticated Role via Developer Authenticated Identities
-- password change
-- password reset, an email is sent with a link to reset the password
-
-Passwords are not saved in clear in the database, but "salted" (via [HMAC-SHA1](http://en.wikipedia.org/wiki/Hash-based_message_authentication_code)) using a dedicated, random salt for each password.
-
-[Amazon SES](http://aws.amazon.com/ses/) is used to send all emails. 
-
-The login function is calling in the backend [GetOpenIdTokenForDeveloperIdentity](http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetOpenIdTokenForDeveloperIdentity.html), a Cognito API to register (or retrieve) the IdentityId and an OpenID Connect token for a user authenticated by your backend authentication process.
-
-A sample implementation can be found at [http://lambdauth.danilop.net](http://lambdauth.danilop.net).
+The authentication service implementation referenced the LambdaAuth implementation at
+    [http://lambdauth.danilop.net](http://lambdauth.danilop.net).
 
 ## License
 
@@ -90,14 +73,3 @@ Sample HTML pages are provided to showcase how to use this framework with a Java
 The same use cases can be implemented on a Mobile device using the [AWS Mobile SDK](http://aws.amazon.com/mobile/sdk/).
 
 ## APIs
-
-The APIs are exposed as AWS Lambda Functions:
-
-| Function              | Input                         | Output                                 |
-|-----------------------|-------------------------------|----------------------------------------|
-|LambdAuthCreateUser    |email, password                | created: true / false                  |
-|LambdAuthVerifyUser    |email, verify                  | verified: true / false                 |
-|LambdAuthLogin         |email, password                | login: true / false,	identityId, token|
-|LambdAuthChangePassword|email, oldPassword, newPassword | changed: true / false                 |
-|LambdAuthLostPassword  |email                          | sent: true / false                     |
-|LambdAuthResetPassword |email, lost, password          | changed: true / false                  |

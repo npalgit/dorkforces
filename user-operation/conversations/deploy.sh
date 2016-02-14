@@ -14,29 +14,10 @@ if [ -z "$found" ]; then
   exit 1
 fi
 
-cp ../config.json .
+cp ../config.json ./DFMessageServer
 
-# Read other configuration from config.json
-REGION=$(jq -r '.REGION' config.json)
-BUCKET=$(jq -r '.BUCKET' config.json)
-MAX_AGE=$(jq -r '.MAX_AGE' config.json)
-IDENTITY_POOL_ID=$(jq -r '.IDENTITY_POOL_ID' config.json)
-DEVELOPER_PROVIDER_NAME=$(jq -r '.DEVELOPER_PROVIDER_NAME' config.json)
+cd DFMessageServer
+eb deploy
+cd ..
 
-# Updating Lambda functions
-for f in $(ls -1); do
-  if [[ $f != DF* ]]; then
-    continue
-  fi
-  echo "Updating function $f begin..."
-    cp config.json $f/
-  cd $f
-  zip -r $f.zip index.js config.json
-  aws lambda update-function-code --function-name ${f} --zip-file fileb://${f}.zip --region $REGION
-    rm config.json
-    rm $f.zip
-  cd ..
-  echo "Updating function $f end"
-done
-
-rm ./config.json
+rm ./DFMessageServer/config.json
